@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.andronovman.vkusnapalata.controller.request.ChangeUserPassword;
+import ru.andronovman.vkusnapalata.controller.request.ChangeUserTel;
 import ru.andronovman.vkusnapalata.entity.UserEntity;
 import ru.andronovman.vkusnapalata.service.UserService;
 
@@ -14,13 +15,33 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
-    public ResponseEntity getUsers() {
-        return ResponseEntity.ok(userService.getAll());
+    @GetMapping("/active")
+    public ResponseEntity getActiveUsers() {
+        return ResponseEntity.ok(userService.getActiveUsers());
+    }
+
+    @GetMapping("/inactive")
+    public ResponseEntity getInactiveUsers() {
+        return ResponseEntity.ok(userService.getInactiveUsers());
+    }
+
+    @GetMapping("/clients")
+    public ResponseEntity getClients() {
+        return ResponseEntity.ok(userService.getClients());
+    }
+
+    @GetMapping("/managers")
+    public ResponseEntity getManagers() {
+        return ResponseEntity.ok(userService.getManagers());
+    }
+
+    @GetMapping("/admins")
+    public ResponseEntity getAdmins() {
+        return ResponseEntity.ok(userService.getAdmins());
     }
 
     @PostMapping
-    public ResponseEntity createUser(@RequestBody UserEntity entity) {
+    public ResponseEntity registration(@RequestBody UserEntity entity) {
         return ResponseEntity.ok(userService.create(entity));
     }
 
@@ -34,6 +55,10 @@ public class UserController {
         return ResponseEntity.ok(userService.changePassword(request));
     }
 
+    @PutMapping("/changeTel")
+    public ResponseEntity changeTel(@RequestBody ChangeUserTel request) {
+        return ResponseEntity.ok(userService.changeTel(request));
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteUser(@PathVariable Long id) {

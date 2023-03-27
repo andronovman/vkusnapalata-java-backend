@@ -1,9 +1,9 @@
 package ru.andronovman.vkusnapalata.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import ru.andronovman.vkusnapalata.entity.converter.BooleanAttributeConverter;
+import ru.andronovman.vkusnapalata.entity.enums.UserRole;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
@@ -18,8 +18,17 @@ public class UserEntity {
     @Column(nullable = false, length = 45)
     private String      password;
 
-    @Column(nullable = false, length = 1)
-    private Character   is_active = 'Y';
+    @Column(name = "is_active", nullable = false, length = 1)
+    @Convert(converter = BooleanAttributeConverter.class)
+    private Boolean     is_active = true;
+
+    @Column(nullable = false, length = 25)
+    @Enumerated(EnumType.STRING)
+    private UserRole    role = UserRole.CLIENT;
+
+    @ManyToOne
+    @JoinColumn(name = "user_ref_id", referencedColumnName = "tel")
+    private UserEntity  prevUser;
 
     public UserEntity() {
     }
@@ -48,11 +57,28 @@ public class UserEntity {
         this.password = password;
     }
 
-    public Character getIs_active() {
+    public Boolean getIs_active() {
         return is_active;
     }
 
-    public void setIs_active(Character is_active) {
+    public void setIs_active(Boolean is_active) {
         this.is_active = is_active;
     }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
+    public UserEntity getPrevUser() {
+        return prevUser;
+    }
+
+    public void setPrevUser(UserEntity prevUser) {
+        this.prevUser = prevUser;
+    }
+
 }
